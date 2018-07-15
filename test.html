@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <div id="con">
+        
+    </div>
+    
+</body>
+<script  src="myajax.js"></script>
+<script>
+    function formatterDateTime(){
+    var date=new Date()
+    var month=date.getMonth() + 1
+    var datetime = date.getFullYear()
+            + ""// "年"
+            + (month >= 10 ? month : "0"+ month)
+            + ""// "月"
+            + (date.getDate() < 10 ? "0" + date.getDate() : date
+                    .getDate())
+            + ""
+            + (date.getHours() < 10 ? "0" + date.getHours() : date
+                    .getHours())
+            + ""
+            + (date.getMinutes() < 10 ? "0" + date.getMinutes() : date
+                    .getMinutes())
+            + ""
+            + (date.getSeconds() < 10 ? "0" + date.getSeconds() : date
+                    .getSeconds());
+    return datetime;
+};
+    window.onload = function showresult(){
+        myajax({
+        url:'http://route.showapi.com/341-3',
+        type:'post',
+        data:{
+            "showapi_timestamp": formatterDateTime(),
+            "showapi_sign": '1a5906422c39468795d8db8621535d59',  //这里需要改成自己的应用的密钥secret
+            "showapi_appid": '55750', //这里需要改成自己的appid
+            "page":"1",
+            "maxResult":"20"
+        },
+        error:function(responseText,responseXML){
+            console.log("操作失败!");
+            console.log(responseText);
+            // document.getElementById("con").innerHTML = 
+        },
+        success:function (data){
+            if(data.showapi_res_code == 0){
+                console.log("调用成功!");
+                data.showapi_res_body.contentlist.forEach(function(item){
+                document.getElementById("con").innerHTML = item.title;
+            });
+            }
+            // console.log("调用成功！");
+        }
+    })
+    }
+</script>
+</html>
